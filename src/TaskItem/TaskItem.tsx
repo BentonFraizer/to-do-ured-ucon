@@ -9,11 +9,11 @@ function TaskItem({ task }: TasItemProps) {
   return (
     <li className="todo-item d-flex justify-content-between p-3" id={task.id}>
       <div className="to-do-left-container d-flex">
-        <input type="checkbox" name="check" className="checkbox me-3" defaultChecked={task.isDone} />
+        <input type="checkbox" name="check" className="checkbox me-3" defaultChecked={task.completed} />
         <button type="button" className="btn btn-outline-danger me-3">
           -
         </button>
-        <span className="to-do-text">{task.text}</span>
+        <span className="to-do-text">{task.title}</span>
       </div>
       <button type="button" className="btn btn-outline-danger">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">

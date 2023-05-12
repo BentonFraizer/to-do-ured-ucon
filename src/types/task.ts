@@ -1,7 +1,8 @@
 type Task = {
+  userId: string;
   id: string;
-  text: string;
-  isDone: boolean;
+  title: string;
+  completed: boolean;
 };
 
 export default Task;

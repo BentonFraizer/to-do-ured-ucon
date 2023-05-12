@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Task } from '../types';
 import TaskItem from '../TaskItem/TaskItem';
 import TasksContext from '../context/TasksContext';
 

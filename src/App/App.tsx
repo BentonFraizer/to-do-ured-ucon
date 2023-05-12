@@ -1,37 +1,52 @@
-import React from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import './App.css';
 import TasksContext from '../context/TasksContext';
 import TasksList from '../TasksList/TasksList';
-
-const tasks = [
-  {
-    id: '84b171fb-c77f-4ff8-9115-c8a76cff41df',
-    text: 'Задача №1',
-    isDone: false,
-  },
-  {
-    id: 'cacd0ec7-1a15-4897-9ed9-f05b2b224d04',
-    text: 'Задача №2',
-    isDone: true,
-  },
-  {
-    id: '5c88ce4d-b98b-48c0-bff0-dfaf6719c06e',
-    text: 'Задача №3',
-    isDone: false,
-  },
-  {
-    id: 'b753b439-b713-42c2-bba9-c42c049b7f5e',
-    text: 'Задача №4',
-    isDone: true,
-  },
-  {
-    id: '5f18769c-55c2-4f11-9a30-8215d128cf2d',
-    text: 'Задача №5',
-    isDone: false,
-  },
-];
+import AppState from './types/AppState';
+import AppReducer from './reducer';
+import { v4 as uuidv4 } from 'uuid';
 
 function App() {
+  const initialState: AppState = {
+    tasks: [],
+  };
+
+  const [taskTitle, setTaskTitle] = useState('');
+
+  const handleTitleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    setTaskTitle(evt.target.value);
+  };
+
+  const [state, dispatch] = useReducer(AppReducer, initialState);
+
+  // Первоначальная инициализация массива задач. Получены из интернета.
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/todos')
+      .then((response) => response.json())
+      .then((json) => {
+        // console.log(json);
+        dispatch({ type: 'TASKS_INIT', payload: json });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  // Добавление задачи
+  const handleSubmit = (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    evt.preventDefault();
+    const newTask = {
+      userId: '1',
+      id: uuidv4(),
+      title: taskTitle,
+      completed: false,
+    };
+    dispatch({ type: 'TASK_ADD', payload: newTask });
+    setTaskTitle('');
+  };
+
+  const { tasks } = state;
+
   return (
     <TasksContext.Provider value={{ tasks }}>
       <div className="app">
@@ -41,16 +56,16 @@ function App() {
               <label htmlFor="inputPassword2" className="visually-hidden">
                 What needs to be done?
               </label>
-              <input type="text" className="form-control" id="inputPassword" placeholder="What needs to be done?" />
+              <input type="text" className="form-control" id="inputPassword" placeholder="What needs to be done?" value={taskTitle} onChange={(evt) => handleTitleChange(evt)} />
             </div>
             <div className="col-auto">
-              <button type="submit" className="add-btn btn btn-primary mb-3">
+              <button type="submit" className="add-btn btn btn-primary mb-3" onClick={(evt) => handleSubmit(evt)}>
                 Add
               </button>
             </div>
           </form>
           <div className="to-do-title">Todo List</div>
-          <TasksList />
+          {tasks.length === 0 ? <h2>Загрузка...</h2> : <TasksList />}
         </div>
       </div>
     </TasksContext.Provider>
