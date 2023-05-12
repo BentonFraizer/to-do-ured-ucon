@@ -9,6 +9,18 @@ type TasItemProps = {
 function TaskItem({ task }: TasItemProps) {
   const { state, dispatch } = useContext(AppContext);
 
+  const handleCheckboxClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    const { checked } = evt.target;
+    const updatedTask = {
+      userId: task.userId,
+      id: task.id,
+      title: task.title,
+      completed: checked,
+    };
+
+    dispatch({ type: 'TASK_CHANGE', payload: updatedTask });
+  };
+
   const handleDelBtnClick = (id: string) => {
     dispatch({ type: 'TASK_DELETE', payload: id });
   };
@@ -16,7 +28,7 @@ function TaskItem({ task }: TasItemProps) {
   return (
     <li className="todo-item d-flex justify-content-between p-3" id={task.id}>
       <div className="to-do-left-container d-flex">
-        <input type="checkbox" name="check" className="checkbox me-3" defaultChecked={task.completed} />
+        <input type="checkbox" name="check" className="checkbox me-3" defaultChecked={task.completed} onChange={(evt) => handleCheckboxClick(evt)} />
         {task.completed ? (
           <>
             <button type="button" className="btn btn-outline-success me-3">

@@ -12,6 +12,10 @@ type Action =
   | {
       type: 'TASK_DELETE';
       payload: string;
+    }
+  | {
+      type: 'TASK_CHANGE';
+      payload: Task;
     };
 
 export default Action;

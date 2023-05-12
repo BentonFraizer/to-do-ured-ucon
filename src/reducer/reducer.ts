@@ -20,6 +20,17 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         tasks: state.tasks.filter((task) => task.id !== action.payload),
       };
+    case 'TASK_CHANGE':
+      return {
+        ...state,
+        tasks: [...state.tasks].map((task) => {
+          if (task.id !== action.payload.id) {
+            return task;
+          } else {
+            return action.payload;
+          }
+        }),
+      };
   }
   return state;
 };
