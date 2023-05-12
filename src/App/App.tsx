@@ -1,13 +1,13 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import './App.css';
-import TasksContext from '../context/TasksContext';
+import AppContext from '../context/AppContext';
 import TasksList from '../TasksList/TasksList';
-import AppState from './types/AppState';
-import AppReducer from './reducer';
+import { State } from '../types/index';
+import reducer from '../reducer/reducer';
 import { v4 as uuidv4 } from 'uuid';
 
 function App() {
-  const initialState: AppState = {
+  const initialState: State = {
     tasks: [],
   };
 
@@ -17,7 +17,7 @@ function App() {
     setTaskTitle(evt.target.value);
   };
 
-  const [state, dispatch] = useReducer(AppReducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   // Первоначальная инициализация массива задач. Получены из интернета.
   useEffect(() => {
@@ -45,10 +45,8 @@ function App() {
     setTaskTitle('');
   };
 
-  const { tasks } = state;
-
   return (
-    <TasksContext.Provider value={{ tasks }}>
+    <AppContext.Provider value={{ state, dispatch }}>
       <div className="app">
         <div className="container d-flex flex-column align-items-start">
           <form className="row g-3">
@@ -65,10 +63,10 @@ function App() {
             </div>
           </form>
           <div className="to-do-title">Todo List</div>
-          {tasks.length === 0 ? <h2>Загрузка...</h2> : <TasksList />}
+          {state.tasks.length === 0 ? <h2>Загрузка...</h2> : <TasksList />}
         </div>
       </div>
-    </TasksContext.Provider>
+    </AppContext.Provider>
   );
 }
 

@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
 import TaskItem from '../TaskItem/TaskItem';
-import TasksContext from '../context/TasksContext';
+import AppContext from '../context/AppContext';
 
 function TasksList() {
-  const { tasks } = useContext(TasksContext);
+  const { state } = useContext(AppContext);
+  const { tasks } = state;
   return (
     <ul className="to-do-list w-100">
       {tasks.map((task) => (
