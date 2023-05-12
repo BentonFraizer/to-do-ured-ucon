@@ -1,4 +1,4 @@
-import { Task } from './index';
+import { Task } from './task';
 
 type State = {
   tasks: Task[];

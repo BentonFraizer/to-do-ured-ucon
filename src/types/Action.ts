@@ -1,4 +1,4 @@
-import { Task } from '../types';
+import { Task, TaskId } from '../types/task';
 
 type Action =
   | {
@@ -11,7 +11,7 @@ type Action =
     }
   | {
       type: 'TASK_DELETE';
-      payload: string;
+      payload: TaskId;
     }
   | {
       type: 'TASK_CHANGE';
